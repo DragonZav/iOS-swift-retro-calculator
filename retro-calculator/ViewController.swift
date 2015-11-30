@@ -71,21 +71,39 @@ class ViewController: UIViewController {
     @IBAction func onEqualPressed(sender: AnyObject) {
         processOperation(currentOperation)
     }
+   
+    @IBAction func onClearPressed(sender: AnyObject) {
+        playSound()
+        
+        
+        rightValStr = ""
+        leftValStr = ""
+        runningNumber = ""
+        result = ""
+        currentOperation = Operation.Empty
+        outputLbl.text = "0"
+    }
     
     func processOperation(op: Operation) {
         playSound()
         
-        if currentOperation != Operation.Empty {
+        if currentOperation != Operation.Empty  {
+            
             
             if runningNumber != "" {
-                
                 rightValStr = runningNumber
                 runningNumber = ""
                 
                 if currentOperation == Operation.Multiply {
                    result = "\(Double(leftValStr)! * Double(rightValStr)!)"
                 } else if currentOperation == Operation.Divide {
-                   result = "\(Double(leftValStr)! / Double(rightValStr)!)"
+                    if let divsor = Double(rightValStr) {
+                        if divsor != 0.0 {
+                            result = "\(Double(leftValStr)! / Double(rightValStr)!)"
+                        } else {
+                            result = "0.0"
+                        }
+                    }
                 } else if currentOperation == Operation.Subtract {
                    result = "\(Double(leftValStr)! - Double(rightValStr)!)"
                 } else if currentOperation == Operation.Add {
@@ -94,7 +112,6 @@ class ViewController: UIViewController {
                 
                 leftValStr = result
                 outputLbl.text = result
-                
                 
             }
             
@@ -107,6 +124,8 @@ class ViewController: UIViewController {
             currentOperation = op
         }
     }
+    
+    
     
     func playSound() {
         if btnSound.playing {
